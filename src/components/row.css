@@ -1,11 +1,11 @@
-.row{
+.row {
   display: flex;
   width: auto;
   height: auto;
   align-items: center;
 }
 
-.cell{
+.cell {
   padding: 2px;
   margin: 3px;
   border: 2px solid black;

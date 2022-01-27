@@ -16,52 +16,37 @@ export enum SudokuNum {
 
 interface CellContainerProps {
   cells: number[];
-  OnChangeCell(cellNum: number): void;
+  selectedNum: number;
+  OnChangeCell(cellNum: number, selectedNum: number): void;
 }
-export const CellContainer = (props: CellContainerProps): JSX.Element => {
-  let cellsJsx: JSX.Element[] = [];
+// prettier-ignore
+export const CellContainer:React.FC<CellContainerProps> = (props)=> {
+  console.log(`currentNum (in CellContainer) = ${props.selectedNum}`);
+  const cellsJsx: JSX.Element[] = [];
 
   for (let i = 0; i < 3; i++) {
-    const cellNum = i * 3;
-    const cell = (
-      <tr>
-        <td>
+    const cells = [];
+    for (let j = 0; j < 3; j++) {
+      const cellNum = i * 3 + j;
+      const cell = (
+        <td key={cellNum}>
           <Cell
-            cellNum={props.cells[i]}
+            key={cellNum}
+            cellNum={props.cells[cellNum]}
             onClick={() => {
-              console.log("clicked");
-              props.OnChangeCell(cellNum);
+              props.OnChangeCell(cellNum, props.selectedNum);
             }}
           />
         </td>
-
-        <td>
-          <Cell
-            cellNum={props.cells[i + 1]}
-            onClick={() => {
-              console.log("clicked");
-              props.OnChangeCell(cellNum + 1);
-            }}
-          />
-        </td>
-        <td>
-          <Cell
-            cellNum={props.cells[i + 2]}
-            onClick={() => {
-              console.log("clicked");
-              props.OnChangeCell(cellNum + 2);
-            }}
-          />
-        </td>
-      </tr>
-    );
-
-    cellsJsx.push(cell);
+      );
+      cells.push(cell);
+    }
+    cellsJsx.push(<tr key={i}>{cells}</tr>);
   }
 
   return (
     <table>
-      <div>{cellsJsx}</div>
+      <tbody>{cellsJsx}</tbody>
     </table>
   );
 };
@@ -74,7 +59,7 @@ interface CellProps {
 const Cell = (props: CellProps): JSX.Element => {
   let num = props.cellNum.toString();
 
-  if (props.cellNum == -1) {
+  if (props.cellNum === -1) {
     num = "";
   }
   return (
